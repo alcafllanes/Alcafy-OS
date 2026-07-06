@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Alcafy, Your life, organized.",
-  description: "A personal life-organization hub for finances, goals, work, study, journaling, content, and travel.",
+  title: "Alcafy - a life captured always 𐙚",
+  description: "Alcafy is an all-in-one digital life organization platform that brings every part of your life together in one beautiful, organized space. Manage your work, school, finances, journal, travel, goals, content, and more—all from one place.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
