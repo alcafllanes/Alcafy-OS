@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Light mode (default): page background is always solid white, per spec. */
+html {
+  background: #ffffff;
+}
+
+body {
+  @apply text-ink antialiased;
+  background: #ffffff;
+}
+
+/* Dark mode: per the user's choice, dark mode overrides the white base too, the page background goes dark, not just the cards. Toggled via a `dark`
+   class on <html>, flipped from the Settings page. */
+html.dark {
+  background: #161019;
+}
+
+html.dark body {
+  background: #161019;
+  color: #f6ecf0;
+}
+
+@layer components {
+  .glass-card {
+    @apply relative rounded-glass border border-white/50 bg-white/45 shadow-glass backdrop-blur-glass transition-all duration-300;
+  }
+  .glass-card:hover {
+    @apply -translate-y-0.5 shadow-glass-hover;
+  }
+
+  html.dark .glass-card {
+    @apply border-white/10 bg-white/[0.06] shadow-none;
+  }
+
+  .glass-panel {
+    @apply rounded-glass-lg border border-white/40 bg-white/40 backdrop-blur-glass;
+  }
+  html.dark .glass-panel {
+    @apply border-white/10 bg-white/[0.04];
+  }
+
+  /* Gradient button with a soft "blob" that grows from the center on hover */
+  .btn-gradient {
+    @apply relative isolate overflow-hidden rounded-glass-sm bg-alc-gradient px-5 py-2.5 font-medium text-white shadow-glass transition-transform active:scale-[0.97];
+  }
+  /* Blob hover: a soft circle grows from wherever the cursor enters the
+     button, tracked via --blob-x/--blob-y/--blob-size set by BlobHover.tsx */
+  .btn-gradient::before {
+    content: "";
+    position: absolute;
+    top: var(--blob-y, 50%);
+    left: var(--blob-x, 50%);
+    width: var(--blob-size, 0px);
+    height: var(--blob-size, 0px);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 70%);
+    border-radius: 9999px;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .btn-gradient:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .btn-gradient > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-item {
+    @apply relative isolate overflow-hidden flex items-center gap-3 rounded-glass-sm px-3.5 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-alc-pink/20 hover:text-ink;
+  }
+  .nav-item.active {
+    @apply bg-alc-gradient text-white shadow-glass;
+  }
+  html.dark .nav-item {
+    @apply text-white/60 hover:bg-white/10 hover:text-white;
+  }
+
+  /* Hover-to-reveal delete button shown on the corner of editable cards */
+  .card-delete-btn {
+    @apply absolute -right-2 -top-2 z-20 flex h-6 w-6 items-center justify-center rounded-full bg-white text-alc-rose opacity-0 shadow-glass transition-opacity duration-150;
+  }
+  .editable-card:hover .card-delete-btn {
+    @apply opacity-100;
+  }
+
+  /* Branded horizontal scrollbar for Kanban boards */
+  .brand-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.2s ease;
+  }
+  .brand-scroll:hover {
+    scrollbar-color: #E981A4 transparent;
+  }
+  .brand-scroll::-webkit-scrollbar {
+    height: 8px;
+  }
+  .brand-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .brand-scroll::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 999px;
+    transition: background 0.2s ease;
+  }
+  .brand-scroll:hover::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #F4C5D7, #E981A4);
+  }
+
+  /* Kanban column: same structure as glass-panel but without the visible
+     frosted background, just enough of a border to define the column */
+  .kanban-column {
+    @apply flex w-72 shrink-0 flex-col gap-3 rounded-glass-lg border border-white/30 p-3;
+  }
+  html.dark .kanban-column {
+    @apply border-white/10;
+  }
+}
